@@ -2,7 +2,7 @@ import binascii
 
 from PyQt5.QtCore import QThread, pyqtSignal
 
-from communication.parse_data import parse_time_domain_data, DomainEnum, parse_frequency_domain_data, check_frame
+from src.communication.parse_data import parse_time_domain_data, DomainEnum, parse_frequency_domain_data, check_frame
 
 
 class CommunicationServer(QThread):
@@ -61,10 +61,7 @@ class CommunicationServer(QThread):
 
         try:
             channel_id, pulse_data_encoding, valid_data = check_frame(data)
-            if channel_id == 2:
-                sample_points = self.parse_func(valid_data)
-            else:
-                sample_points = parse_time_domain_data(valid_data)
+            sample_points = parse_time_domain_data(valid_data)
         except ValueError as e:
             self.data_error.emit(str(e), hex_data)
         else:
