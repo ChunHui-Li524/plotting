@@ -1,56 +1,74 @@
+# -*- coding: utf-8 -*-
+"""
+@Author: Li ChunHui
+@Date:   2024-12-04
+@Description: 
+    This is a brief description of what the script does.
+"""
 import binascii
+import socket
 
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QObject, pyqtSignal
 
-from src.communication.parse_data import parse_time_domain_data, DomainEnum, parse_frequency_domain_data, check_frame
+from src.communication.parse_data import check_frame, parse_time_domain_data
 
 
-class CommunicationServer(QThread):
-    data_received = pyqtSignal(int, int, list, str)  # channel_id, pulse_data_encoding, sample_points
-    data_error = pyqtSignal(str, str)  # error msg, data
+class DataHandler(QObject):
+    data_succeeded = pyqtSignal(int, int, list, str)  # channel_id, pulse_data_encoding, sample_points
+    data_erred = pyqtSignal(str, str)  # error msg, data
 
-    def __init__(self, domain: DomainEnum):
+    def __init__(self, target_client_ip):
         super().__init__()
         self.is_running = True
+        self.target_client_ip = target_client_ip
+        self.frame_buffer = bytearray()  # ç¼“å†²åŒºç”¨äºæ„å»ºå®Œæ•´çš„å¸§
 
-        self.parse_func = {
-            DomainEnum.TIME: parse_time_domain_data,
-            DomainEnum.FREQUENCY: parse_frequency_domain_data
-        }.get(domain)
-
-        self.frame_buffer = bytearray()  # »º³åÇøÓÃÓÚ¹¹½¨ÍêÕûµÄÖ¡
-
-    def run(self):
-        raise NotImplementedError("run() method must be implemented in subclass")
+    def run(self, sock: socket.socket):
+        while self.is_running:
+            try:
+                data, addr = sock.recvfrom(1024)
+            except socket.timeout:
+                continue
+            except OSError as e:
+                self.data_erred.emit(f"UDPæœåŠ¡å™¨æ¥æ”¶æ•°æ®å¤±è´¥: {self.target_client_ip}", str(e))
+                self.is_running = False
+                continue
+            if addr == self.target_client_ip:
+                self.handle_data(data)
 
     def handle_data(self, data):
+        """
+        æŒç»­æ¥æ”¶UDPå‘æ¥çš„æ•°æ®
+        :param data:
+        :return:
+        """
         self.frame_buffer.extend(data)
         # print("Received data:", binascii.hexlify(data))
 
         while self.is_running:
-            # ´ÓÉÏ´ÎÕÒµ½µÄÖ¡Í·Î»ÖÃ»òÆğÊ¼Î»ÖÃ¿ªÊ¼²éÕÒÏÂÒ»¸öÖ¡Í·
+            # ä»ä¸Šæ¬¡æ‰¾åˆ°çš„å¸§å¤´ä½ç½®æˆ–èµ·å§‹ä½ç½®å¼€å§‹æŸ¥æ‰¾ä¸‹ä¸€ä¸ªå¸§å¤´
             frame_start = self.frame_buffer.find(b'\xDF\xFD')
             frame_end = self.frame_buffer.find(b'\xDE\xAF')
-            # Ö¡Í·+Ö¡Î²
+            # å¸§å¤´+å¸§å°¾
             if frame_start != -1 and frame_end != -1:
                 if frame_start < frame_end:
-                    # ·¢ÏÖĞÂµÄÖ¡Í·,¶ªÆú¾ÉÖ¡Í·
+                    # å‘ç°æ–°çš„å¸§å¤´,ä¸¢å¼ƒæ—§å¸§å¤´
                     frame_data = self.frame_buffer[frame_start:frame_end + 2]
                     self.process_valid_frame(frame_data)
                 else:
-                    # Á¬ĞøÕı³£Á½Ö¡
+                    # è¿ç»­æ­£å¸¸ä¸¤å¸§
                     frame_data = self.frame_buffer[:frame_end + 2]
                     self.process_valid_frame(frame_data)
                 self.frame_buffer = self.frame_buffer[frame_end + 2:]
             # Nothing
             elif frame_start == -1 and frame_end == -1:
                 break
-            # Ö¡Î²
+            # å¸§å°¾
             elif frame_start == -1 and frame_end != -1:
                 frame_data = self.frame_buffer[:frame_end + 2]
                 self.process_valid_frame(frame_data)
                 self.frame_buffer = self.frame_buffer[frame_end + 2:]
-            # Ö¡Í·
+            # å¸§å¤´
             else:
                 self.frame_buffer = self.frame_buffer[frame_start:]
                 break
@@ -63,10 +81,9 @@ class CommunicationServer(QThread):
             channel_id, pulse_data_encoding, valid_data = check_frame(data)
             sample_points = parse_time_domain_data(valid_data)
         except ValueError as e:
-            self.data_error.emit(str(e), hex_data)
+            self.data_erred.emit(str(e), hex_data)
         else:
-            self.data_received.emit(channel_id, pulse_data_encoding, sample_points, hex_data)
+            self.data_succeeded.emit(channel_id, pulse_data_encoding, sample_points, hex_data)
 
     def stop(self):
         self.is_running = False
-        self.quit()

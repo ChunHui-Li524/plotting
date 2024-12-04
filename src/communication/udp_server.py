@@ -7,41 +7,31 @@
 """
 
 import socket
+import threading
 
-from src.communication.communication_server import CommunicationServer
-from src.communication.parse_data import DATA_LENGTH, DomainEnum
+from src.communication.data_handler import DataHandler
 
 
-class UDPCommunicationServer(CommunicationServer):
-    def __init__(self, domain, server_ip, server_port, client_ip):
-        super().__init__(domain)
+class UDPServer:
+    def __init__(self, server_ip, server_port, client_ips):
+        super().__init__()
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind((server_ip, server_port))
-        self.target_client_ip = client_ip
+        self.data_handlers = []
+        for ip in client_ips:
+            self.data_handlers.append(DataHandler(ip))
+
+    def connect_callback(self, data_success_callback, data_error_callback):
+        for data_handler in self.data_handlers:
+            data_handler.data_succeeded.connect(data_success_callback)
+            data_handler.data_erred.connect(data_error_callback)
 
     def run(self):
-        while self.is_running:
-            try:
-                data, client_addr = self.sock.recvfrom(DATA_LENGTH)
-            except OSError as e:
-                self.data_error.emit(str(e), "UDP服务器接收数据失败")
-                break
-
-            if client_addr[0] == self.target_client_ip:
-                self.handle_data(data)
+        for data_handler in self.data_handlers:
+            threading.Thread(target=data_handler.run, args=(self.sock,)).start()
 
     def stop(self):
-        super().stop()
+        for data_handler in self.data_handlers:
+            data_handler.stop()
         self.sock.close()
-
-
-if __name__ == "__main__":
-    server = UDPCommunicationServer(DomainEnum.TIME, '127.0.0.1', 8080, '127.0.0.1')
-    server.start()
-
-    # 在这里可以添加控制逻辑，比如在某个条件满足时调用server.stop()来停止监听
-
-    # 假设运行一段时间后停止服务
-    input("按回车键停止服务器...")
-    server.stop()
 

@@ -1,12 +1,5 @@
-from enum import Enum
-
 MAX_SAMPLE_DATA_NUMBER = 512
 DATA_LENGTH = MAX_SAMPLE_DATA_NUMBER * 2 + 8        # 1024个点+帧头帧尾等信息8个字节
-
-
-class DomainEnum(Enum):
-    FREQUENCY = 0
-    TIME = 1
 
 
 def check_frame(data):
