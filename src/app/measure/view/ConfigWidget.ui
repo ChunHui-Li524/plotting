@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AddWidget</class>
+ <widget class="QWidget" name="AddWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>152</width>
+    <height>239</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">image: url(:/png/images/加号.png);</string>
+  </property>
+ </widget>
+ <resources>
+  <include location="../../../resources/image/image.qrc"/>
+ </resources>
+ <connections/>
+</ui>
