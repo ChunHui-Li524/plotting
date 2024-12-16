@@ -49,26 +49,26 @@ class DataHandler(QObject):
             # 从上次找到的帧头位置或起始位置开始查找下一个帧头
             frame_start = self.frame_buffer.find(b'\xDF\xFD')
             frame_end = self.frame_buffer.find(b'\xDE\xAF')
-            # 帧头+帧尾
+            # 数据中有帧头+帧尾
             if frame_start != -1 and frame_end != -1:
                 if frame_start < frame_end:
-                    # 发现新的帧头,丢弃旧帧头
+                    # 发现新的完整帧,丢弃旧帧头
                     frame_data = self.frame_buffer[frame_start:frame_end + 2]
                     self.process_valid_frame(frame_data)
                 else:
-                    # 连续正常两帧
+                    # 连续正常两帧，即帧尾、帧头（此时的帧头是下一帧的开始）
                     frame_data = self.frame_buffer[:frame_end + 2]
                     self.process_valid_frame(frame_data)
                 self.frame_buffer = self.frame_buffer[frame_end + 2:]
             # Nothing
             elif frame_start == -1 and frame_end == -1:
                 break
-            # 帧尾
+            # 只有帧尾，是完整的帧
             elif frame_start == -1 and frame_end != -1:
                 frame_data = self.frame_buffer[:frame_end + 2]
                 self.process_valid_frame(frame_data)
                 self.frame_buffer = self.frame_buffer[frame_end + 2:]
-            # 帧头
+            # 只有帧头，丢弃旧帧头
             else:
                 self.frame_buffer = self.frame_buffer[frame_start:]
                 break
