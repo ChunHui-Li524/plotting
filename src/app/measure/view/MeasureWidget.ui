@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>114</width>
-    <height>138</height>
+    <width>165</width>
+    <height>156</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,58 +15,68 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="labelChannel">
+    <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="text">
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {
+	color: black;
+	font-family: '微软雅黑';
+    font-weight: bold;
+	background-color: rgb(170, 170, 255);
+}</string>
+     </property>
+     <property name="title">
       <string>通道标识</string>
      </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="labelX1">
-     <property name="text">
-      <string>X1</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="labelX2">
-     <property name="text">
-      <string>X2</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="labelDeltaX">
-     <property name="text">
-      <string>ΔX</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="labelY1">
-     <property name="text">
-      <string>Y1</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="labelY2">
-     <property name="text">
-      <string>Y2</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="labelDeltaY">
-     <property name="text">
-      <string>ΔY</string>
-     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QLabel" name="labelX1">
+        <property name="text">
+         <string>X1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelX2">
+        <property name="text">
+         <string>X2</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelDeltaX">
+        <property name="text">
+         <string>ΔX</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelY1">
+        <property name="text">
+         <string>Y1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelY2">
+        <property name="text">
+         <string>Y2</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelDeltaY">
+        <property name="text">
+         <string>ΔY</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

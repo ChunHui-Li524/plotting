@@ -14,8 +14,20 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_AddWidget(object):
     def setupUi(self, AddWidget):
         AddWidget.setObjectName("AddWidget")
-        AddWidget.resize(152, 239)
-        AddWidget.setStyleSheet("image: url(:/png/images/加号.png);")
+        AddWidget.resize(324, 281)
+        self.gridLayout = QtWidgets.QGridLayout(AddWidget)
+        self.gridLayout.setObjectName("gridLayout")
+        self.frame = QtWidgets.QFrame(AddWidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
+        self.frame.setSizePolicy(sizePolicy)
+        self.frame.setStyleSheet("image: url(:/png/images/加号.png);")
+        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.gridLayout.addWidget(self.frame, 0, 0, 1, 1)
 
         self.retranslateUi(AddWidget)
         QtCore.QMetaObject.connectSlotsByName(AddWidget)

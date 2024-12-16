@@ -18,6 +18,7 @@ class QAddWidget(QWidget):
         super().__init__(parent)
         self.ui = Ui_AddWidget()
         self.ui.setupUi(self)
+        self.setMinimumWidth(50)
 
         self.installEventFilter(self)
 
@@ -26,3 +27,12 @@ class QAddWidget(QWidget):
             self.clicked.emit()  # 发出信号
             return True
         return super().eventFilter(obj, event)
+
+
+if __name__ == '__main__':
+    from PyQt5.QtWidgets import QApplication
+    import sys
+    app = QApplication(sys.argv)
+    window = QAddWidget()
+    window.show()
+    sys.exit(app.exec())

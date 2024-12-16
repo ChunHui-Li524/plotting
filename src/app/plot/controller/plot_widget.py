@@ -20,3 +20,9 @@ class QMyPlotWidget(PlotWidget):
     def _init_ui(self):
         self.setXRange(0, 1000)
         self.setYRange(0, 1)
+
+    def hide_ruler(self):
+        pass
+
+    def show_ruler(self):
+        pass
