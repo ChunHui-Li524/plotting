@@ -27,15 +27,42 @@ class QUdpConfigWidget(QWidget):
         self.ui.lineEditServerIP.setText("192.168.0.71")
         self.ui.lineEditServerPort.setText("10010")
 
-        self.ui.lineEditClient1.setText("192.168.0.98")
-        self.ui.lineEditClient2.setText("192.168.0.99")
-        self.ui.lineEditClient3.setText("192.168.0.100")
+        self.ui.lineEditClientIP1.setText("192.168.0.98")
+        self.ui.lineEditClientPort1.setText("10018")
+
+        self.ui.lineEditClientIP2.setText("192.168.0.99")
+        self.ui.lineEditClientPort1.setText("10019")
+
+        self.ui.lineEditClientIP3.setText("192.168.0.100")
+        self.ui.lineEditClientPort1.setText("10020")
+
+        # 本地测试
+        self.ui.lineEditServerIP.setText("127.0.0.1")
+        self.ui.lineEditServerPort.setText("8080")
+
+        self.ui.lineEditClientIP1.setText("127.0.0.1")
+        self.ui.lineEditClientPort1.setText("8081")
+
+        self.ui.lineEditClientIP2.setText("127.0.0.1")
+        self.ui.lineEditClientPort1.setText("8082")
+
+        self.ui.lineEditClientIP3.setText("127.0.0.1")
+        self.ui.lineEditClientPort1.setText("8083")
 
     @pyqtSlot()
     def on_btnOpen_clicked(self):
         # 当前未开启，说明点击开启，要检查输入
         if not self.is_open:
-            clients = {self.ui.lineEditClient1.text(), self.ui.lineEditClient2.text(), self.ui.lineEditClient3.text()}
+            try:
+                port1 = int(self.ui.lineEditClientPort1.text())
+                port2 = int(self.ui.lineEditClientPort2.text())
+                port3 = int(self.ui.lineEditClientPort3.text())
+            except ValueError:
+                QMessageBox.warning(self, "错误", "端口必须是整数")
+                return
+            clients = {(self.ui.lineEditClientIP1.text(), port1),
+                       (self.ui.lineEditClientIP2.text(), port2),
+                       (self.ui.lineEditClientIP3.text(), port3)}
             if len(clients) != 3:
                 QMessageBox.warning(self, "错误", "请输入3个不重复的客户端IP地址")
                 return
@@ -44,7 +71,9 @@ class QUdpConfigWidget(QWidget):
     def get_udp_config(self):
         return (self.ui.lineEditServerIP.text(),
                 self.ui.lineEditServerPort.text(),
-                [self.ui.lineEditClient1.text(), self.ui.lineEditClient2.text(), self.ui.lineEditClient3.text()])
+                [(self.ui.lineEditClientIP1.text(), int(self.ui.lineEditClientPort1.text())),
+                 (self.ui.lineEditClientIP2.text(), int(self.ui.lineEditClientPort2.text())),
+                 (self.ui.lineEditClientIP3.text(), int(self.ui.lineEditClientPort3.text()))])
 
     def set_open(self):
         self.ui.btnOpen.setIcon(QIcon(":/png/images/open.png"))
@@ -58,6 +87,7 @@ class QUdpConfigWidget(QWidget):
 if __name__ == '__main__':
     from PyQt5.QtWidgets import QApplication
     import sys
+
     app = QApplication(sys.argv)
     window = QUdpConfigWidget()
     window.show()

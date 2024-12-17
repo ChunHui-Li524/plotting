@@ -6,16 +6,55 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>398</width>
-    <height>282</height>
+    <width>280</width>
+    <height>445</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <item row="2" column="0">
-    <spacer name="horizontalSpacer">
+   <item row="1" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {
+	color: rgb(85, 170, 255);
+	font-family: '微软雅黑';
+    font-weight: bold;
+}</string>
+     </property>
+     <property name="title">
+      <string>下位机1设置（CH1 - CH8）</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>IP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>端口</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEditClientPort1"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEditClientIP1"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -46,7 +85,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>上位机IP</string>
+         <string>IP</string>
         </property>
        </widget>
       </item>
@@ -56,7 +95,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>上位机端口</string>
+         <string>端口</string>
         </property>
        </widget>
       </item>
@@ -66,7 +105,33 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="5" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="0">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="1">
     <widget class="QPushButton" name="btnOpen">
      <property name="minimumSize">
       <size>
@@ -89,21 +154,8 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="0" colspan="3">
-    <widget class="QGroupBox" name="groupBox_2">
+   <item row="2" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupBox_3">
      <property name="styleSheet">
       <string notr="true">QGroupBox {
 	color: rgb(85, 170, 255);
@@ -112,57 +164,73 @@
 }</string>
      </property>
      <property name="title">
-      <string>下位机设置</string>
+      <string>下位机2设置（CH9 - CH16）</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QGridLayout" name="gridLayout_4">
       <property name="leftMargin">
        <number>30</number>
       </property>
       <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>下位机1 IP（CH1 - CH8）</string>
+         <string>IP</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEditClient1"/>
-      </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>下位机2 IP（CH9 - CH16）</string>
+         <string>端口</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEditClient2"/>
+       <widget class="QLineEdit" name="lineEditClientPort2"/>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>下位机3 IP（CH17 - CH18）</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEditClient3"/>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEditClientIP2"/>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="3" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <item row="3" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {
+	color: rgb(85, 170, 255);
+	font-family: '微软雅黑';
+    font-weight: bold;
+}</string>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
+     <property name="title">
+      <string>下位机3设置（CH17 - CH18）</string>
      </property>
-    </spacer>
+     <layout class="QGridLayout" name="gridLayout_6">
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>IP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>端口</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineEditClientPort3"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEditClientIP3"/>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

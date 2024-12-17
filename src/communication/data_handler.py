@@ -17,23 +17,27 @@ class DataHandler(QObject):
     data_succeeded = pyqtSignal(int, int, list, str)  # channel_id, pulse_data_encoding, sample_points
     data_erred = pyqtSignal(str, str)  # error msg, data
 
-    def __init__(self, target_client_ip):
+    def __init__(self, target_client_ip, port):
         super().__init__()
         self.is_running = True
         self.target_client_ip = target_client_ip
+        self.target_port = port
         self.frame_buffer = bytearray()  # 缓冲区用于构建完整的帧
 
     def run(self, sock: socket.socket):
         while self.is_running:
             try:
-                data, addr = sock.recvfrom(1024)
+                data, addr = sock.recvfrom(2048)
+                # print(addr)
             except socket.timeout:
                 continue
             except OSError as e:
+                # print(e)
                 self.data_erred.emit(f"UDP服务器接收数据失败: {self.target_client_ip}", str(e))
                 self.is_running = False
                 continue
-            if addr == self.target_client_ip:
+            if addr == (self.target_client_ip, int(self.target_port)):
+                # print(data)
                 self.handle_data(data)
 
     def handle_data(self, data):
@@ -80,6 +84,7 @@ class DataHandler(QObject):
         try:
             channel_id, pulse_data_encoding, valid_data = check_frame(data)
             sample_points = parse_time_domain_data(valid_data)
+            print(channel_id, pulse_data_encoding)
         except ValueError as e:
             self.data_erred.emit(str(e), hex_data)
         else:

@@ -18,8 +18,8 @@ class UDPServer:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind((server_ip, server_port))
         self.data_handlers = []
-        for ip in client_ips:
-            self.data_handlers.append(DataHandler(ip))
+        for ip, port in client_ips:
+            self.data_handlers.append(DataHandler(ip, port))
 
     def connect_callback(self, data_success_callback, data_error_callback):
         for data_handler in self.data_handlers:
