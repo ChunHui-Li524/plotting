@@ -11,6 +11,7 @@ import socket
 from PyQt5.QtCore import QObject, pyqtSignal
 
 from src.communication.parse_data import check_frame, parse_time_domain_data
+from src.log.my_logger import get_logger
 
 
 class DataHandler(QObject):
@@ -27,17 +28,16 @@ class DataHandler(QObject):
     def run(self, sock: socket.socket):
         while self.is_running:
             try:
-                data, addr = sock.recvfrom(2048)
-                # print(addr)
+                data, addr = sock.recvfrom(2048)        # 数据帧有512个点，单个点2字节，加上帧头帧尾，大于1024
+                # get_logger().debug(f"Received data: {addr}")
             except socket.timeout:
                 continue
             except OSError as e:
-                # print(e)
+                get_logger().error(f"UDP服务器接收数据失败: {self.target_client_ip}, {e}")
                 self.data_erred.emit(f"UDP服务器接收数据失败: {self.target_client_ip}", str(e))
                 self.is_running = False
                 continue
             if addr == (self.target_client_ip, int(self.target_port)):
-                # print(data)
                 self.handle_data(data)
 
     def handle_data(self, data):
@@ -84,7 +84,7 @@ class DataHandler(QObject):
         try:
             channel_id, pulse_data_encoding, valid_data = check_frame(data)
             sample_points = parse_time_domain_data(valid_data)
-            print(channel_id, pulse_data_encoding)
+            # get_logger().debug(f"Received data: {channel_id}, {pulse_data_encoding}")
         except ValueError as e:
             self.data_erred.emit(str(e), hex_data)
         else:
