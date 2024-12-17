@@ -65,8 +65,14 @@ class Ui_MyMainWindow(object):
         icon1.addPixmap(QtGui.QPixmap(":/png/images/测量.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionStartMeasure.setIcon(icon1)
         self.actionStartMeasure.setObjectName("actionStartMeasure")
+        self.actionUDPConfig = QtWidgets.QAction(MyMainWindow)
+        self.actionUDPConfig.setCheckable(True)
+        self.actionUDPConfig.setIcon(icon)
+        self.actionUDPConfig.setObjectName("actionUDPConfig")
+        self.menu.addAction(self.actionUDPConfig)
         self.menu.addAction(self.actionMeasureConfig)
         self.menubar.addAction(self.menu.menuAction())
+        self.toolBar.addAction(self.actionUDPConfig)
         self.toolBar.addAction(self.actionMeasureConfig)
         self.toolBar.addAction(self.actionStartMeasure)
 
@@ -80,4 +86,6 @@ class Ui_MyMainWindow(object):
         self.toolBar.setWindowTitle(_translate("MyMainWindow", "toolBar"))
         self.actionMeasureConfig.setText(_translate("MyMainWindow", "测量设置"))
         self.actionStartMeasure.setText(_translate("MyMainWindow", "开始测量"))
+        self.actionUDPConfig.setText(_translate("MyMainWindow", "UDP通信设置"))
+        self.actionUDPConfig.setToolTip(_translate("MyMainWindow", "UDP通信设置"))
 import image_rc

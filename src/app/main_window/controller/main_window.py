@@ -5,7 +5,7 @@
 @Description: 
     This is a brief description of what the script does.
 """
-
+import threading
 
 from PyQt5.QtWidgets import QMainWindow, QSpacerItem, QSizePolicy
 
@@ -14,6 +14,8 @@ from src.app.measure.controller.add_widget import QAddWidget
 from src.app.measure.controller.config_widget import QMeasureConfigWidget
 from src.app.measure.controller.measure_widget import QMeasureWidget
 from src.app.plot.controller.plot_widget import QMyPlotWidget
+from src.app.udp_config.controller.udp_config_widget import QUdpConfigWidget
+from src.communication.udp_server import UDPServer
 
 
 class QMyMainWindow(QMainWindow):
@@ -25,12 +27,32 @@ class QMyMainWindow(QMainWindow):
         self.setWindowTitle("通道测量仪")
         self._plot_widgets = {}
         self._measure_widgets = {}
+        self._udp_server: UDPServer = None
+        self._communicate_thread = None
         self._init_ui()
 
     def _init_ui(self):
+        self._init_udp_config_widget()
         self._init_plot_frame()
         self._init_measure_frame()
+        self.ui.actionUDPConfig.triggered.connect(self._udp_config.show)
         self.ui.actionMeasureConfig.triggered.connect(self._config_widget.show)
+
+    def _init_udp_config_widget(self):
+        self._udp_config = QUdpConfigWidget(self)
+        self._udp_config.confirmed.connect(self.on_udp_config_confirmed)
+
+    def on_udp_config_confirmed(self):
+        if self._udp_config.is_open:
+            self._udp_server.stop()
+            self._communicate_thread.join()
+            self._udp_config.set_closed()
+        else:
+            self._udp_server = UDPServer(*self._udp_config.get_udp_config())
+            self._udp_server.connect_callback(print, print)
+            self._communicate_thread = threading.Thread(target=self._udp_server.run)
+            self._communicate_thread.start()
+            self._udp_config.set_open()
 
     def _init_plot_frame(self):
         """
@@ -83,6 +105,8 @@ class QMyMainWindow(QMainWindow):
 
     def on_actionStartMeasure_toggled(self, is_checked):
         self.ui.frameMeasure.setHidden(not is_checked)
+
+
 
 
 if __name__ == '__main__':

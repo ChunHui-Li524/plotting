@@ -15,17 +15,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
-    <item row="3" column="0">
-     <widget class="QFrame" name="frameMeasure">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout"/>
-     </widget>
-    </item>
     <item row="0" column="0">
      <widget class="QFrame" name="framePlotGroup">
       <property name="sizePolicy">
@@ -44,17 +33,15 @@
      </widget>
     </item>
     <item row="2" column="0">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+     <widget class="QFrame" name="frameMeasure">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
       </property>
-     </spacer>
+      <layout class="QHBoxLayout" name="horizontalLayout"/>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -71,6 +58,7 @@
     <property name="title">
      <string>设置</string>
     </property>
+    <addaction name="actionUDPConfig"/>
     <addaction name="actionMeasureConfig"/>
    </widget>
    <addaction name="menu"/>
@@ -89,6 +77,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionUDPConfig"/>
    <addaction name="actionMeasureConfig"/>
    <addaction name="actionStartMeasure"/>
   </widget>
@@ -111,6 +100,21 @@
    </property>
    <property name="text">
     <string>开始测量</string>
+   </property>
+  </action>
+  <action name="actionUDPConfig">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../resources/image/image.qrc">
+     <normaloff>:/png/images/设置.png</normaloff>:/png/images/设置.png</iconset>
+   </property>
+   <property name="text">
+    <string>UDP通信设置</string>
+   </property>
+   <property name="toolTip">
+    <string>UDP通信设置</string>
    </property>
   </action>
  </widget>
