@@ -7,7 +7,7 @@
 """
 import threading
 
-from src.communication.udp_server import UDPServer
+from src.service.communication.udp_server import UDPServer
 
 
 def my_test_udp_server():

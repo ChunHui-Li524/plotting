@@ -15,7 +15,7 @@ from src.app.measure.controller.config_widget import QMeasureConfigWidget
 from src.app.measure.controller.measure_widget import QMeasureWidget
 from src.app.plot.controller.plot_widget import QMyPlotWidget
 from src.app.udp_config.controller.udp_config_widget import QUdpConfigWidget
-from src.communication.udp_server import UDPServer
+from src.service.communication.udp_server import UDPServer
 
 
 class QMyMainWindow(QMainWindow):

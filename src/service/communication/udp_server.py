@@ -9,7 +9,7 @@
 import socket
 import threading
 
-from src.communication.data_handler import DataHandler
+from src.service.communication.data_handler import DataHandler
 
 
 class UDPServer:

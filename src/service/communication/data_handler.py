@@ -10,8 +10,8 @@ import socket
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
-from src.communication.parse_data import check_frame, parse_time_domain_data
-from src.log.my_logger import get_logger
+from src.service.communication.parse_data import check_frame, parse_time_domain_data
+from src.service.log.my_logger import get_logger
 
 
 class DataHandler(QObject):
