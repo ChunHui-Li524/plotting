@@ -28,14 +28,19 @@ class QMyPlotWidget(PlotWidget):
         # 设置y轴范围
         self.setYRange(-0.6, 0.6)
         self.setXRange(0, SAMPLE_NUM * self.wave_nums)      # 512个点一个波形，展示3个
+        self._init_ticks()
+        self._init_wave_split_line()
+        self._init_axis_label()
+        self._add_x_line()
+        self._add_y_line()
+
+    def _init_ticks(self):
         # 获取 X 轴对象
         ticks = [i * SAMPLE_NUM for i in range(self.wave_nums + 1)]
         x_axis = self.plotItem.getAxis('bottom')
         x_axis.setTicks([[(v, str(v)) for v in ticks]])
 
-        self.curves = [self.plot(pen=(255, 0, 0), name=f'Waveform {i+1}') for i in range(self.wave_nums)]
-        self.waveforms_data = [np.zeros(SAMPLE_NUM) for _ in range(self.wave_nums)]
-
+    def _init_wave_split_line(self):
         # 添加无限线
         for i in range(self.wave_nums + 1):
             x_pos = i * SAMPLE_NUM
@@ -44,18 +49,10 @@ class QMyPlotWidget(PlotWidget):
                                    pen=pg.mkPen(color=(255, 255, 255), width=1, dash=[10, 20]))
             self.plotItem.addItem(line)
 
+    def _init_axis_label(self):
         # 设置轴标签（PyQtGraph本身不直接支持单位，可以在标签文本中包含单位）
         self.plotItem.setLabel(axis='left', text='Voltage (V)')
         self.plotItem.setLabel(axis='bottom', text='Time (ns)')
-
-        self.wave_labels = [pg.TextItem(f"初始脉冲", color=(255, 255, 255)) for _ in range(self.wave_nums)]
-        for i, label in enumerate(self.wave_labels):
-            label.setVisible(False)
-            label.setPos(i * SAMPLE_NUM, 0.5)
-            self.plotItem.addItem(label)
-
-        self._add_x_line()
-        self._add_y_line()
 
     def _add_x_line(self):
         self.infinite_x1 = pg.InfiniteLine(pos=256, angle=90, pen=(0, 255, 0), movable=True)
@@ -87,36 +84,35 @@ class QMyPlotWidget(PlotWidget):
         self.infinite_y1.setVisible(is_visible)
         self.infinite_y2.setVisible(is_visible)
 
-    def update_plot(self, pulse_id, new_waveform_data):
-        # 移除第一个波形的数据
-        self.waveforms_data.pop(0)
-        # 插入新的波形数据
-        self.waveforms_data.append(new_waveform_data)
+    def create_channel_curves(self, r, g, b):
+        curves = [self.plot(pen=(r, g, b), name=f'Waveform {i + 1}') for i in range(self.wave_nums)]
 
-        # 更新标签
-        self.update_labels(pulse_id)
+        wave_labels = [pg.TextItem(f"初始脉冲", color=(r, g, b)) for _ in range(self.wave_nums)]
+        for i, label in enumerate(wave_labels):
+            label.setVisible(False)
+            label.setPos(i * SAMPLE_NUM, 0.5)
+            self.plotItem.addItem(label)
+        return curves, wave_labels
 
-        # 更新图形,
-        self.update_curve()
-
-    def update_labels(self, pulse_id):
+    def update_labels(self, pulse_id, wave_labels):
         for i in range(self.wave_nums - 1):
-            self.wave_labels[i].setText(self.wave_labels[i + 1].toPlainText())
-        self.wave_labels[self.wave_nums - 1].setText(f"脉冲{pulse_id}")
+            wave_labels[i].setText(wave_labels[i + 1].toPlainText())
+        wave_labels[self.wave_nums - 1].setText(f"脉冲{pulse_id}")
 
-    def update_curve(self, wave_data: list):
-        for i, curve in enumerate(self.curves):
+        for wave_label in wave_labels:
+            wave_label.setVisible(True)
+
+    def update_curve(self, curves: list, wave_data: list):
+        for i, curve in enumerate(curves):
             start = SAMPLE_NUM * i
             x = np.arange(start, start + len(wave_data[i]), 1)
             curve.setData(x=x, y=wave_data[i])
 
-            self.wave_labels[i].setVisible(True)
-
-    def clear_plot(self):
-        for curve in self.curves:
+    def clear_plot(self, curves, wave_labels):
+        for curve in curves:
             curve.clear()
         # 标签移出视野范围
-        for label in self.wave_labels:
+        for label in wave_labels:
             label.setVisible(False)
         self.plotItem.getViewBox().update()
 
@@ -124,5 +120,4 @@ class QMyPlotWidget(PlotWidget):
         # 创建ImageExporter对象来导出图像
         exporter = ImageExporter(self.plotItem)
         exporter.fileType = 'png'
-        file_path = save_path
-        exporter.export(file_path)
+        exporter.export(save_path)

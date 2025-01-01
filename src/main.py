@@ -1,4 +1,4 @@
-from src.app.main_window.controller.main_window import QMyMainWindow
+from src.app.main_window.view.main_window import QMyMainWindow
 
 
 if __name__ == '__main__':

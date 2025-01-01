@@ -9,11 +9,11 @@ import threading
 
 from PyQt5.QtWidgets import QMainWindow, QSpacerItem, QSizePolicy
 
-from src.app.main_window.view.MyMainWindow import Ui_MyMainWindow
+from src.app.main_window.view.ui.MyMainWindow import Ui_MyMainWindow
 from src.app.measure.controller.add_widget import QAddWidget
 from src.app.measure.controller.config_widget import QMeasureConfigWidget
 from src.app.measure.controller.measure_widget import QMeasureWidget
-from src.app.plot.controller.plot_widget import QMyPlotWidget
+from src.app.plot.view.plot_widget import QMyPlotWidget
 from src.app.udp_config.controller.udp_config_widget import QUdpConfigWidget
 from src.service.communication.udp_server import UDPServer
 
@@ -105,8 +105,6 @@ class QMyMainWindow(QMainWindow):
 
     def on_actionStartMeasure_toggled(self, is_checked):
         self.ui.frameMeasure.setHidden(not is_checked)
-
-
 
 
 if __name__ == '__main__':
