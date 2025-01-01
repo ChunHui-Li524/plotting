@@ -19,7 +19,7 @@ def check_frame(data):
 
     channel_id = valid_data[3]
     pulse_data_encoding = int.from_bytes(valid_data[4:6], byteorder='big')
-    if not (0x01 <= channel_id <= 0x03):
+    if not (0x01 <= channel_id <= 0x12):
         raise ValueError(f"通道标识错误:{channel_id}")
 
     if not (0x0 <= pulse_data_encoding <= 0x7D0):

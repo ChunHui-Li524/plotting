@@ -5,7 +5,10 @@
 @Description: 
     This is a brief description of what the script does.
 """
+import queue
 import threading
+
+from PyQt5.QtCore import QTimer
 
 from src.app.main_window.view.main_window import QMyMainWindow
 from src.app.plot.controller.channel_controller import WavePlotController
@@ -19,6 +22,11 @@ class MainWindowController:
         self._udp_server: UDPServer = None
         self._communicate_thread = None
         self.plot_controller = {}
+
+        self.data_queue = queue.Queue()  # 使用队列存储待处理数据
+        self.timer = QTimer()
+        self.timer.setInterval(50)      # 50ms绘制一次波形，防止界面卡顿
+        self.timer.timeout.connect(self._delay_update)
 
         self._init_plot_controller()
         self.window.uiUpdConfig.confirmed.connect(self.on_udp_config_confirmed)
@@ -34,6 +42,7 @@ class MainWindowController:
 
     def on_udp_config_confirmed(self):
         if self.window.uiUpdConfig.is_open:
+            self.timer.stop()
             self._udp_server.stop()
             self._communicate_thread.join()
             self.window.uiUpdConfig.set_closed()
@@ -42,12 +51,18 @@ class MainWindowController:
             self._udp_server.connect_callback(self.process_succeeded_data, self.process_erred_data)
             self._communicate_thread = threading.Thread(target=self._udp_server.run)
             self._communicate_thread.start()
+            self.timer.start()
             self.window.uiUpdConfig.set_open()
 
     def process_succeeded_data(self, channel_id, pulse_id, sample_points, hex_data):
-        if channel_id in self.plot_controller:
-            self.plot_controller[channel_id].update_plot(pulse_id, sample_points)
+        self.data_queue.put((channel_id, pulse_id, sample_points, hex_data))
 
     def process_erred_data(self, error_msg, hex_data):
         print("err >>> ", error_msg, hex_data)
         get_logger().error(f"{error_msg} >>> {hex_data}")
+
+    def _delay_update(self):
+        if not self.data_queue.empty():
+            channel_id, pulse_id, sample_points, hex_data = self.data_queue.get()
+            if channel_id in self.plot_controller:
+                self.plot_controller[channel_id].update_plot(pulse_id, sample_points)
