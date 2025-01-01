@@ -19,6 +19,7 @@ from src.service.log.my_logger import get_logger
 
 class MainWindowController:
     def __init__(self, window: QMyMainWindow):
+        raise ValueError(1)
         self.window = window
         self._udp_server: UDPServer = None
         self._communicate_thread = None
