@@ -5,7 +5,6 @@
 @Description: 
     This is a brief description of what the script does.
 """
-import threading
 
 from PyQt5.QtWidgets import QMainWindow, QSpacerItem, QSizePolicy
 
@@ -15,7 +14,6 @@ from src.app.measure.controller.config_widget import QMeasureConfigWidget
 from src.app.measure.controller.measure_widget import QMeasureWidget
 from src.app.plot.view.plot_widget import QMyPlotWidget
 from src.app.udp_config.controller.udp_config_widget import QUdpConfigWidget
-from src.service.communication.udp_server import UDPServer
 
 
 class QMyMainWindow(QMainWindow):
@@ -24,35 +22,17 @@ class QMyMainWindow(QMainWindow):
         self.ui = Ui_MyMainWindow()
         self.ui.setupUi(self)
 
-        self.setWindowTitle("通道测量仪")
+        self.setWindowTitle("18通道AD测量仪")
         self._plot_widgets = {}
         self._measure_widgets = {}
-        self._udp_server: UDPServer = None
-        self._communicate_thread = None
         self._init_ui()
 
     def _init_ui(self):
-        self._init_udp_config_widget()
+        self.uiUpdConfig = QUdpConfigWidget(self)
         self._init_plot_frame()
         self._init_measure_frame()
-        self.ui.actionUDPConfig.triggered.connect(self._udp_config.show)
+        self.ui.actionUDPConfig.triggered.connect(self.uiUpdConfig.show)
         self.ui.actionMeasureConfig.triggered.connect(self._config_widget.show)
-
-    def _init_udp_config_widget(self):
-        self._udp_config = QUdpConfigWidget(self)
-        self._udp_config.confirmed.connect(self.on_udp_config_confirmed)
-
-    def on_udp_config_confirmed(self):
-        if self._udp_config.is_open:
-            self._udp_server.stop()
-            self._communicate_thread.join()
-            self._udp_config.set_closed()
-        else:
-            self._udp_server = UDPServer(*self._udp_config.get_udp_config())
-            self._udp_server.connect_callback(print, print)
-            self._communicate_thread = threading.Thread(target=self._udp_server.run)
-            self._communicate_thread.start()
-            self._udp_config.set_open()
 
     def _init_plot_frame(self):
         """
@@ -67,6 +47,9 @@ class QMyMainWindow(QMainWindow):
 
                 self._plot_widgets[index] = widget
                 index += 1
+
+    def get_plot_widgets(self):
+        return self._plot_widgets
 
     def _init_measure_frame(self):
         """
@@ -98,10 +81,10 @@ class QMyMainWindow(QMainWindow):
         for index in range(1, 10):
             if index in screen_ids:
                 self._measure_widgets[index].show()
-                self._plot_widgets[index].show_ruler()
+                self._plot_widgets[index].set_ruler_visible(True)
             else:
                 self._measure_widgets[index].hide()
-                self._plot_widgets[index].hide_ruler()
+                self._plot_widgets[index].set_ruler_visible(False)
 
     def on_actionStartMeasure_toggled(self, is_checked):
         self.ui.frameMeasure.setHidden(not is_checked)

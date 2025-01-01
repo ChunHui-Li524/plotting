@@ -15,8 +15,8 @@ from src.service.log.my_logger import get_logger
 
 
 class DataHandler(QObject):
-    data_succeeded = pyqtSignal(int, int, list, str)  # channel_id, pulse_data_encoding, sample_points
-    data_erred = pyqtSignal(str, str)  # error msg, data
+    data_succeeded = pyqtSignal(int, int, list, str)  # channel_id, pulse_data_encoding, sample_points, hex_data
+    data_erred = pyqtSignal(str, str)  # error msg, hex_data
 
     def __init__(self, target_client_ip, port):
         super().__init__()

@@ -31,8 +31,9 @@ class QMyPlotWidget(PlotWidget):
         self._init_ticks()
         self._init_wave_split_line()
         self._init_axis_label()
-        self._add_x_line()
-        self._add_y_line()
+        self._add_x_ruler()
+        self._add_y_ruler()
+        self.set_ruler_visible(False)
 
     def _init_ticks(self):
         # 获取 X 轴对象
@@ -54,7 +55,7 @@ class QMyPlotWidget(PlotWidget):
         self.plotItem.setLabel(axis='left', text='Voltage (V)')
         self.plotItem.setLabel(axis='bottom', text='Time (ns)')
 
-    def _add_x_line(self):
+    def _add_x_ruler(self):
         self.infinite_x1 = pg.InfiniteLine(pos=256, angle=90, pen=(0, 255, 0), movable=True)
         self.infinite_x1.xChanged.connect(self._x_line_changed)
         self.plotItem.addItem(self.infinite_x1)
@@ -63,7 +64,7 @@ class QMyPlotWidget(PlotWidget):
         self.infinite_x2.xChanged.connect(self._x_line_changed)
         self.plotItem.addItem(self.infinite_x2)
 
-    def _add_y_line(self):
+    def _add_y_ruler(self):
         self.infinite_y1 = pg.InfiniteLine(pos=0.5, angle=0, pen=(0, 255, 0), movable=True)
         self.infinite_y1.yChanged.connect(self._y_line_changed)
         self.plotItem.addItem(self.infinite_y1)
@@ -78,7 +79,7 @@ class QMyPlotWidget(PlotWidget):
     def _y_line_changed(self):
         self.y_changed.emit(self.infinite_y1.y(), self.infinite_y2.y())
 
-    def set_line_visible(self, is_visible):
+    def set_ruler_visible(self, is_visible):
         self.infinite_x1.setVisible(is_visible)
         self.infinite_x2.setVisible(is_visible)
         self.infinite_y1.setVisible(is_visible)
