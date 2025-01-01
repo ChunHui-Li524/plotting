@@ -10,6 +10,7 @@ import threading
 
 from PyQt5.QtCore import QTimer
 
+from src.app.log_tab.controller.log_widget_controller import LogTabController
 from src.app.main_window.view.main_window import QMyMainWindow
 from src.app.plot.controller.channel_controller import WavePlotController
 from src.service.communication.udp_server import UDPServer
@@ -29,6 +30,7 @@ class MainWindowController:
         self.timer.timeout.connect(self._delay_update)
 
         self._init_plot_controller()
+        self.log_controller = LogTabController(self.window.uiLog)
         self.window.uiUpdConfig.confirmed.connect(self.on_udp_config_confirmed)
 
     def _init_plot_controller(self):
@@ -56,10 +58,14 @@ class MainWindowController:
 
     def process_succeeded_data(self, channel_id, pulse_id, sample_points, hex_data):
         self.data_queue.put((channel_id, pulse_id, sample_points, hex_data))
+        self.log_controller.append_success_text(f"接收通道{channel_id} 脉冲{pulse_id}数据成功\n"
+                                                f"数据：{sample_points}\n"
+                                                f"原始数据：{hex_data}")
 
     def process_erred_data(self, error_msg, hex_data):
-        print("err >>> ", error_msg, hex_data)
-        get_logger().error(f"{error_msg} >>> {hex_data}")
+        text = f"{error_msg} >>> {hex_data}"
+        self.log_controller.append_error_text(text)
+        get_logger().error(text)
 
     def _delay_update(self):
         if not self.data_queue.empty():

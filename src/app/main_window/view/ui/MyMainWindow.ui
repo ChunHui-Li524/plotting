@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>871</width>
-    <height>604</height>
+    <width>1106</width>
+    <height>830</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,31 +16,45 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
-     <widget class="QFrame" name="framePlotGroup">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QGridLayout" name="gridLayout"/>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QFrame" name="frameMeasure">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout"/>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>通道波形</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QFrame" name="framePlotGroup">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout"/>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QFrame" name="frameMeasure">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout"/>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -50,7 +64,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>871</width>
+     <width>1106</width>
      <height>22</height>
     </rect>
    </property>
@@ -83,7 +97,7 @@
   </widget>
   <action name="actionMeasureConfig">
    <property name="icon">
-    <iconset resource="../../../resources/image/image.qrc">
+    <iconset resource="../../../../resources/image/image.qrc">
      <normaloff>:/png/images/设置.png</normaloff>:/png/images/设置.png</iconset>
    </property>
    <property name="text">
@@ -95,7 +109,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../../resources/image/image.qrc">
+    <iconset resource="../../../../resources/image/image.qrc">
      <normaloff>:/png/images/测量.png</normaloff>:/png/images/测量.png</iconset>
    </property>
    <property name="text">
@@ -107,7 +121,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../../resources/image/image.qrc">
+    <iconset resource="../../../../resources/image/image.qrc">
      <normaloff>:/png/images/设置.png</normaloff>:/png/images/设置.png</iconset>
    </property>
    <property name="text">
@@ -119,7 +133,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../../../resources/image/image.qrc"/>
+  <include location="../../../../resources/image/image.qrc"/>
  </resources>
  <connections/>
 </ui>

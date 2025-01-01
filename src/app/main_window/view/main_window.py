@@ -8,6 +8,7 @@
 
 from PyQt5.QtWidgets import QMainWindow, QSpacerItem, QSizePolicy
 
+from src.app.log_tab.view.log_widget import QLogWidget
 from src.app.main_window.view.ui.MyMainWindow import Ui_MyMainWindow
 from src.app.measure.controller.add_widget import QAddWidget
 from src.app.measure.controller.config_widget import QMeasureConfigWidget
@@ -29,6 +30,7 @@ class QMyMainWindow(QMainWindow):
 
     def _init_ui(self):
         self.uiUpdConfig = QUdpConfigWidget(self)
+        self._init_log_tab()
         self._init_plot_frame()
         self._init_measure_frame()
         self.ui.actionUDPConfig.triggered.connect(self.uiUpdConfig.show)
@@ -36,6 +38,10 @@ class QMyMainWindow(QMainWindow):
         for i in range(1, 10):
             self._plot_widgets[i].x_changed.connect(self._measure_widgets[i].update_x)
             self._plot_widgets[i].y_changed.connect(self._measure_widgets[i].update_y)
+
+    def _init_log_tab(self):
+        self.uiLog = QLogWidget(self)
+        self.ui.tabWidget.addTab(self.uiLog, "日志")
 
     def _init_plot_frame(self):
         """
@@ -94,6 +100,9 @@ class QMyMainWindow(QMainWindow):
         # 如果选中，则显示测量尺
         if is_checked:
             self.uiMeasureConfigWidget.on_btnConfirm_clicked()
+        else:
+            for plot_widget in self._plot_widgets.values():
+                plot_widget.set_ruler_visible(False)
 
 
 if __name__ == '__main__':
