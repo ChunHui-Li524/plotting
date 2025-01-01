@@ -56,20 +56,20 @@ class QMyPlotWidget(PlotWidget):
         self.plotItem.setLabel(axis='bottom', text='Time (ns)')
 
     def _add_x_ruler(self):
-        self.infinite_x1 = pg.InfiniteLine(pos=256, angle=90, pen=(0, 255, 0), movable=True)
+        self.infinite_x1 = pg.InfiniteLine(pos=256, angle=90, pen=(0, 0, 255), movable=True)
         self.infinite_x1.xChanged.connect(self._x_line_changed)
         self.plotItem.addItem(self.infinite_x1)
 
-        self.infinite_x2 = pg.InfiniteLine(pos=512, angle=90, pen=(0, 255, 0), movable=True)
+        self.infinite_x2 = pg.InfiniteLine(pos=512, angle=90, pen=(0, 0, 255), movable=True)
         self.infinite_x2.xChanged.connect(self._x_line_changed)
         self.plotItem.addItem(self.infinite_x2)
 
     def _add_y_ruler(self):
-        self.infinite_y1 = pg.InfiniteLine(pos=0.5, angle=0, pen=(0, 255, 0), movable=True)
+        self.infinite_y1 = pg.InfiniteLine(pos=0.5, angle=0, pen=(0, 0, 255), movable=True)
         self.infinite_y1.yChanged.connect(self._y_line_changed)
         self.plotItem.addItem(self.infinite_y1)
 
-        self.infinite_y2 = pg.InfiniteLine(pos=-0.5, angle=0, pen=(0, 255, 0), movable=True)
+        self.infinite_y2 = pg.InfiniteLine(pos=-0.5, angle=0, pen=(0, 0, 255), movable=True)
         self.infinite_y2.yChanged.connect(self._y_line_changed)
         self.plotItem.addItem(self.infinite_y2)
 

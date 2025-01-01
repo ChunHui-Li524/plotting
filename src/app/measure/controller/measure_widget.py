@@ -21,14 +21,14 @@ class QMeasureWidget(QWidget):
             self.ui.groupBox.setTitle(f"通道 {channel_id}")
 
     def update_x(self, x1, x2):
-        self.ui.labelX1.setText(str(x1))
-        self.ui.labelX2.setText(str(x2))
-        self.ui.labelDeltaX.setText(str(x2 - x1))
+        self.ui.labelX1.setText("{:.2f}".format(x1))
+        self.ui.labelX2.setText("{:.2f}".format(x2))
+        self.ui.labelDeltaX.setText("{:.2f}".format(x2 - x1))
 
     def update_y(self, y1, y2):
-        self.ui.labelY1.setText(str(y1))
-        self.ui.labelY2.setText(str(y2))
-        self.ui.labelDeltaY.setText(str(y2 - y1))
+        self.ui.labelY1.setText("{:.2f}".format(y1))
+        self.ui.labelY2.setText("{:.2f}".format(y2))
+        self.ui.labelDeltaY.setText("{:.2f}".format(y2 - y1))
 
 
 if __name__ == '__main__':

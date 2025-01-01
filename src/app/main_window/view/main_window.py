@@ -32,7 +32,10 @@ class QMyMainWindow(QMainWindow):
         self._init_plot_frame()
         self._init_measure_frame()
         self.ui.actionUDPConfig.triggered.connect(self.uiUpdConfig.show)
-        self.ui.actionMeasureConfig.triggered.connect(self._config_widget.show)
+        self.ui.actionMeasureConfig.triggered.connect(self.uiMeasureConfigWidget.show)
+        for i in range(1, 10):
+            self._plot_widgets[i].x_changed.connect(self._measure_widgets[i].update_x)
+            self._plot_widgets[i].y_changed.connect(self._measure_widgets[i].update_y)
 
     def _init_plot_frame(self):
         """
@@ -57,9 +60,9 @@ class QMyMainWindow(QMainWindow):
         :return:
         """
         self._add_widget = QAddWidget(self)
-        self._config_widget = QMeasureConfigWidget(self)
-        self._add_widget.clicked.connect(self._config_widget.show)
-        self._config_widget.config_confirmed.connect(self.on_config_confirmed)
+        self.uiMeasureConfigWidget = QMeasureConfigWidget(self)
+        self._add_widget.clicked.connect(self.uiMeasureConfigWidget.show)
+        self.uiMeasureConfigWidget.config_confirmed.connect(self.on_config_confirmed)
 
         # 第一个测量说明控件
         self.ui.frameMeasure.layout().addWidget(QMeasureWidget())
@@ -88,6 +91,9 @@ class QMyMainWindow(QMainWindow):
 
     def on_actionStartMeasure_toggled(self, is_checked):
         self.ui.frameMeasure.setHidden(not is_checked)
+        # 如果选中，则显示测量尺
+        if is_checked:
+            self.uiMeasureConfigWidget.on_btnConfirm_clicked()
 
 
 if __name__ == '__main__':
