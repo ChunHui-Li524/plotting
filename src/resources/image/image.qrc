@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="png">
+    <file>images/logo.png</file>
     <file>images/close.png</file>
     <file>images/open.png</file>
     <file>images/加号.png</file>
