@@ -14,7 +14,7 @@ from src.app.log_tab.controller.log_widget_controller import LogTabController
 from src.app.main_window.view.main_window import QMyMainWindow
 from src.app.plot.controller.channel_controller import WavePlotController
 from src.service.communication.udp_server import UDPServer
-from src.service.log.my_logger import get_logger
+from src.service.log.my_logger import get_logger, new_logger
 
 
 class MainWindowController:
@@ -49,6 +49,7 @@ class MainWindowController:
             self._udp_server.stop()
             self._communicate_thread.join()
             self.window.uiUpdConfig.set_closed()
+            new_logger()
         else:
             self._udp_server = UDPServer(*self.window.uiUpdConfig.get_udp_config())
             self._udp_server.connect_callback(self.process_succeeded_data, self.process_erred_data)
@@ -59,9 +60,11 @@ class MainWindowController:
 
     def process_succeeded_data(self, channel_id, pulse_id, sample_points, hex_data):
         self.data_queue.put((channel_id, pulse_id, sample_points, hex_data))
-        self.log_controller.append_success_text(f"接收通道{channel_id} 脉冲{pulse_id}数据成功\n"
-                                                f"数据：{sample_points}\n"
-                                                f"原始数据：{hex_data}")
+        text = f"接收通道{channel_id} 脉冲{pulse_id}数据成功\n" \
+               f"数据：{sample_points}\n" \
+               f"原始数据：{hex_data}"
+        self.log_controller.append_success_text(text)
+        get_logger().info(text)
 
     def process_erred_data(self, error_msg, hex_data):
         text = f"{error_msg} >>> {hex_data}"
