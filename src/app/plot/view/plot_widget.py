@@ -85,13 +85,13 @@ class QMyPlotWidget(PlotWidget):
         self.infinite_y1.setVisible(is_visible)
         self.infinite_y2.setVisible(is_visible)
 
-    def create_channel_curves(self, r, g, b):
+    def create_channel_curves(self, r, g, b, y):
         curves = [self.plot(pen=(r, g, b), name=f'Waveform {i + 1}') for i in range(self.wave_nums)]
 
         wave_labels = [pg.TextItem(f"初始脉冲", color=(r, g, b)) for _ in range(self.wave_nums)]
         for i, label in enumerate(wave_labels):
             label.setVisible(False)
-            label.setPos(i * SAMPLE_NUM, 0.5)
+            label.setPos(i * SAMPLE_NUM, y)
             self.plotItem.addItem(label)
         return curves, wave_labels
 

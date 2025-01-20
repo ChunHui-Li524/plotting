@@ -16,9 +16,9 @@ class WavePlotController:
         self.plot_widget = plot_widget
         self.data_model = ChannelModel(channel_id)
         if color == "red":
-            self.curves, self.wave_labels = self.plot_widget.create_channel_curves(255, 0, 0)
+            self.curves, self.wave_labels = self.plot_widget.create_channel_curves(255, 0, 0, 0.5)
         else:
-            self.curves, self.wave_labels = self.plot_widget.create_channel_curves(0, 255, 0)
+            self.curves, self.wave_labels = self.plot_widget.create_channel_curves(0, 255, 0, 0.3)
 
     def update_plot(self, pulse_id, new_waveform_data):
         # 处理数据

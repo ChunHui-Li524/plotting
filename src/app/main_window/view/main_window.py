@@ -50,12 +50,20 @@ class QMyMainWindow(QMainWindow):
         """
         index = 1
         for i in range(3):
-            for j in range(3):
-                widget = QMyPlotWidget()
-                self.ui.framePlotGroup.layout().addWidget(widget, i, j)
-
-                self._plot_widgets[index] = widget
-                index += 1
+            widget = QMyPlotWidget()
+            self.ui.tab.layout().addWidget(widget)
+            self._plot_widgets[index] = widget
+            index += 1
+        for i in range(3):
+            widget = QMyPlotWidget()
+            self.ui.tab_2.layout().layout().addWidget(widget)
+            self._plot_widgets[index] = widget
+            index += 1
+        for i in range(3):
+            widget = QMyPlotWidget()
+            self.ui.tab_3.layout().addWidget(widget)
+            self._plot_widgets[index] = widget
+            index += 1
 
     def get_plot_widgets(self):
         return self._plot_widgets
