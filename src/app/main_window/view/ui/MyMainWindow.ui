@@ -88,6 +88,7 @@
    <addaction name="actionUDPConfig"/>
    <addaction name="actionMeasureConfig"/>
    <addaction name="actionStartMeasure"/>
+   <addaction name="actionClear"/>
   </widget>
   <action name="actionMeasureConfig">
    <property name="icon">
@@ -123,6 +124,18 @@
    </property>
    <property name="toolTip">
     <string>UDP通信设置</string>
+   </property>
+  </action>
+  <action name="actionClear">
+   <property name="icon">
+    <iconset resource="../../../../resources/image/image.qrc">
+     <normaloff>:/png/images/设置.png</normaloff>:/png/images/设置.png</iconset>
+   </property>
+   <property name="text">
+    <string>清除波形</string>
+   </property>
+   <property name="toolTip">
+    <string>清除波形</string>
    </property>
   </action>
  </widget>

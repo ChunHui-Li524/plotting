@@ -73,12 +73,16 @@ class Ui_MyMainWindow(object):
         self.actionUDPConfig.setCheckable(True)
         self.actionUDPConfig.setIcon(icon)
         self.actionUDPConfig.setObjectName("actionUDPConfig")
+        self.actionClear = QtWidgets.QAction(MyMainWindow)
+        self.actionClear.setIcon(icon)
+        self.actionClear.setObjectName("actionClear")
         self.menu.addAction(self.actionUDPConfig)
         self.menu.addAction(self.actionMeasureConfig)
         self.menubar.addAction(self.menu.menuAction())
         self.toolBar.addAction(self.actionUDPConfig)
         self.toolBar.addAction(self.actionMeasureConfig)
         self.toolBar.addAction(self.actionStartMeasure)
+        self.toolBar.addAction(self.actionClear)
 
         self.retranslateUi(MyMainWindow)
         self.tabWidget.setCurrentIndex(2)
@@ -96,4 +100,6 @@ class Ui_MyMainWindow(object):
         self.actionStartMeasure.setText(_translate("MyMainWindow", "开始测量"))
         self.actionUDPConfig.setText(_translate("MyMainWindow", "UDP通信设置"))
         self.actionUDPConfig.setToolTip(_translate("MyMainWindow", "UDP通信设置"))
+        self.actionClear.setText(_translate("MyMainWindow", "清除波形"))
+        self.actionClear.setToolTip(_translate("MyMainWindow", "清除波形"))
 import image_rc

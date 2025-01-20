@@ -26,12 +26,13 @@ class MainWindowController:
 
         self.data_queue = queue.Queue()  # 使用队列存储待处理数据
         self.timer = QTimer()
-        self.timer.setInterval(50)      # 50ms绘制一次波形，防止界面卡顿
+        self.timer.setInterval(50)  # 50ms绘制一次波形，防止界面卡顿
         self.timer.timeout.connect(self._delay_update)
 
         self._init_plot_controller()
         self.log_controller = LogTabController(self.window.uiLog)
         self.window.uiUpdConfig.confirmed.connect(self.on_udp_config_confirmed)
+        self.window.ui.actionClear.triggered.connect(self.clear_all_plot)
 
     def _init_plot_controller(self):
         # 每个屏对应两个波形
@@ -72,3 +73,7 @@ class MainWindowController:
             channel_id, pulse_id, sample_points, hex_data = self.data_queue.get()
             if channel_id in self.plot_controller:
                 self.plot_controller[channel_id].update_plot(pulse_id, sample_points)
+
+    def clear_all_plot(self):
+        for controller in self.plot_controller.values():
+            controller.clear_plot()
