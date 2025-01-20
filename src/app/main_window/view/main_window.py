@@ -29,6 +29,7 @@ class QMyMainWindow(QMainWindow):
         self._init_ui()
 
     def _init_ui(self):
+        self.ui.tabWidget.setCurrentWidget(self.ui.tab)
         self.uiUpdConfig = QUdpConfigWidget(self)
         self._init_log_tab()
         self._init_plot_frame()
