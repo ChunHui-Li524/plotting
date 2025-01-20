@@ -33,6 +33,7 @@ class MainWindowController:
         self.log_controller = LogTabController(self.window.uiLog)
         self.window.uiUpdConfig.confirmed.connect(self.on_udp_config_confirmed)
         self.window.ui.actionClear.triggered.connect(self.clear_all_plot)
+        self.window.closeEvent = self.on_close_event  # 绑定关闭事件处理方法
 
     def _init_plot_controller(self):
         # 每个屏对应两个波形
@@ -80,3 +81,11 @@ class MainWindowController:
     def clear_all_plot(self):
         for controller in self.plot_controller.values():
             controller.clear_plot()
+
+    def on_close_event(self, event):
+        if self._udp_server:
+            self.timer.stop()
+            self._udp_server.stop()
+            if self._communicate_thread and self._communicate_thread.is_alive():
+                self._communicate_thread.join(timeout=5)  # 设置超时时间以防止阻塞过久
+        event.accept()  # 接受关闭事件，关闭窗口
