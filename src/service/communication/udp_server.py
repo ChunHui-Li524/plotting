@@ -17,7 +17,8 @@ class UDPServer:
         super().__init__()
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind((server_ip, server_port))
-        self.sock.settimeout(3)
+        # 增加超时时间，避免因为超时导致数据丢失
+        self.sock.settimeout(10)
         self.data_handlers = []
         self.threads = []
         for ip, port in client_ips:
