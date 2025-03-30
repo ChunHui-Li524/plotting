@@ -12,14 +12,14 @@ from pyqtgraph import PlotWidget
 from pyqtgraph.exporters import ImageExporter
 
 SAMPLE_NUM = 512
-WAVE_NUM = 3
+WAVE_NUM = 5
 
 
 class QMyPlotWidget(PlotWidget):
     x_changed = pyqtSignal(float, float)
     y_changed = pyqtSignal(float, float)
 
-    def __init__(self, wave_nums=3, parent=None):
+    def __init__(self, wave_nums=WAVE_NUM, parent=None):
         super().__init__(parent)
         self.wave_nums = wave_nums
         self.init_ui()

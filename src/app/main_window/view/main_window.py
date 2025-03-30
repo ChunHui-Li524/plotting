@@ -52,17 +52,17 @@ class QMyMainWindow(QMainWindow):
         index = 1
         for i in range(3):
             widget = QMyPlotWidget()
-            self.ui.tab.layout().addWidget(widget)
+            self.ui.frame.layout().addWidget(widget)
             self._plot_widgets[index] = widget
             index += 1
         for i in range(3):
             widget = QMyPlotWidget()
-            self.ui.tab_2.layout().layout().addWidget(widget)
+            self.ui.frame_2.layout().layout().addWidget(widget)
             self._plot_widgets[index] = widget
             index += 1
         for i in range(3):
             widget = QMyPlotWidget()
-            self.ui.tab_3.layout().addWidget(widget)
+            self.ui.frame_3.layout().addWidget(widget)
             self._plot_widgets[index] = widget
             index += 1
 

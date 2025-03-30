@@ -22,7 +22,7 @@ def check_frame(data):
     if not (0x01 <= channel_id <= 0x12):
         raise ValueError(f"通道标识错误:{channel_id}")
 
-    if not (0x0 <= pulse_data_encoding <= 0x7D0):
+    if not (0x0 <= pulse_data_encoding <= 0x1400):
         raise ValueError(f"脉冲数据编码标识错误:{pulse_data_encoding}")
 
     return channel_id, pulse_data_encoding, valid_data
