@@ -38,18 +38,18 @@ class QUdpConfigWidget(QWidget):
         self.ui.lineEditClientIP3.setText("192.168.0.100")
         self.ui.lineEditClientPort3.setText("10020")
 
-        # 本地测试
-        self.ui.lineEditServerIP.setText("127.0.0.1")
-        self.ui.lineEditServerPort.setText("8080")
-
-        self.ui.lineEditClientIP1.setText("127.0.0.1")
-        self.ui.lineEditClientPort1.setText("8081")
-
-        self.ui.lineEditClientIP2.setText("127.0.0.1")
-        self.ui.lineEditClientPort2.setText("8082")
-
-        self.ui.lineEditClientIP3.setText("127.0.0.1")
-        self.ui.lineEditClientPort3.setText("8083")
+        # # 本地测试
+        # self.ui.lineEditServerIP.setText("127.0.0.1")
+        # self.ui.lineEditServerPort.setText("8080")
+        #
+        # self.ui.lineEditClientIP1.setText("127.0.0.1")
+        # self.ui.lineEditClientPort1.setText("8081")
+        #
+        # self.ui.lineEditClientIP2.setText("127.0.0.1")
+        # self.ui.lineEditClientPort2.setText("8082")
+        #
+        # self.ui.lineEditClientIP3.setText("127.0.0.1")
+        # self.ui.lineEditClientPort3.setText("8083")
 
     @pyqtSlot()
     def on_btnOpen_clicked(self):

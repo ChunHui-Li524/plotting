@@ -29,8 +29,9 @@ class DataHandler(QObject):
         while self.is_running:
             try:
                 data, addr = sock.recvfrom(2048)        # 数据帧有512个点，单个点2字节，加上帧头帧尾，大于1024
-                # get_logger().debug(f"Received data: {addr}")
-            except socket.timeout:
+                get_logger().debug(f"Received data: {data}")
+            except socket.timeout as e:
+                get_logger().error(f"UDP连接超时: {self.target_client_ip}, {e}")
                 continue
             except OSError as e:
                 get_logger().error(f"UDP服务器接收数据失败: {self.target_client_ip}, {e}")
@@ -84,7 +85,7 @@ class DataHandler(QObject):
         try:
             channel_id, pulse_data_encoding, valid_data = check_frame(data)
             sample_points = parse_time_domain_data(valid_data)
-            # get_logger().debug(f"Received data: {channel_id}, {pulse_data_encoding}")
+            get_logger().info(f"接收到数据: 通道{channel_id}, 脉冲{pulse_data_encoding}, data: \n{hex_data}")
         except ValueError as e:
             self.data_erred.emit(str(e), hex_data)
         else:
