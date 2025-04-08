@@ -29,14 +29,14 @@ class QUdpConfigWidget(QWidget):
         self.ui.lineEditServerIP.setText("192.168.0.71")
         self.ui.lineEditServerPort.setText("10010")
 
-        self.ui.lineEditClientIP1.setText("192.168.0.98")
-        self.ui.lineEditClientPort1.setText("10018")
+        self.ui.lineEditClientIP1.setText("192.168.0.115")
+        self.ui.lineEditClientPort1.setText("10034")
 
-        self.ui.lineEditClientIP2.setText("192.168.0.99")
-        self.ui.lineEditClientPort2.setText("10019")
+        self.ui.lineEditClientIP2.setText("192.168.0.119")
+        self.ui.lineEditClientPort2.setText("10042")
 
-        self.ui.lineEditClientIP3.setText("192.168.0.100")
-        self.ui.lineEditClientPort3.setText("10020")
+        self.ui.lineEditClientIP3.setText("192.168.0.120")
+        self.ui.lineEditClientPort3.setText("10044")
 
         # # 本地测试
         # self.ui.lineEditServerIP.setText("127.0.0.1")
