@@ -12,7 +12,7 @@ from PyQt5.QtCore import QTimer
 
 from src.app.log_tab.controller.log_widget_controller import LogTabController
 from src.app.main_window.view.main_window import QMyMainWindow
-from src.app.plot.controller.channel_controller import WavePlotController
+from src.app.plot.controller.channel_controller import WavePlotController, PlotPathManager
 from src.service.communication.udp_server import UDPServer
 from src.service.log.my_logger import get_logger, new_logger
 
@@ -50,8 +50,11 @@ class MainWindowController:
             self._udp_server.stop()
             self._communicate_thread.join()
             self.window.uiUpdConfig.set_closed()
+            for controller in self.plot_controller.values():
+                controller.save_final_plot()
             new_logger()
         else:
+            PlotPathManager.update_base_folder()
             self._udp_server = UDPServer(*self.window.uiUpdConfig.get_udp_config())
             self._udp_server.connect_callback(self.process_succeeded_data, self.process_erred_data)
             self._communicate_thread = threading.Thread(target=self._udp_server.run)
