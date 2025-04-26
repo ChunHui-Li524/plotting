@@ -26,8 +26,8 @@ class QUdpConfigWidget(QWidget):
         self._init_ui()
 
     def _init_ui(self):
-        self.ui.lineEditServerIP.setText("192.168.0.71")
-        self.ui.lineEditServerPort.setText("10010")
+        self.ui.lineEditServerIP.setText("192.168.0.105")
+        self.ui.lineEditServerPort.setText("10009")
 
         self.ui.lineEditClientIP1.setText("192.168.0.115")
         self.ui.lineEditClientPort1.setText("10034")
