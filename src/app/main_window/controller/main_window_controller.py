@@ -84,6 +84,8 @@ class MainWindowController:
     def clear_all_plot(self):
         for controller in self.plot_controller.values():
             controller.clear_plot()
+        if self._udp_server:
+            self._udp_server.send_clear_cmd()
 
     def on_close_event(self, event):
         if self._udp_server:

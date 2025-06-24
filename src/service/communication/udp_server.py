@@ -21,7 +21,7 @@ class UDPServer:
         self.sock.bind((server_ip, server_port))
         # 增加超时时间，避免因为超时导致数据丢失
         self.sock.settimeout(10)
-        self.client_ips = client_ips
+        self.client_addresses = client_ips
 
         self.is_running = False
         self.data_queue = queue.Queue()  # 新增队列用于接收数据
@@ -49,12 +49,16 @@ class UDPServer:
         while self.is_running:
             try:
                 data, addr = self.sock.recvfrom(2048)  # 接收数据
-                if addr in self.client_ips:
+                if addr in self.client_addresses:
                     self.data_queue.put((data, addr))  # 将数据放入队列
                     get_logger().info(f"Received data from {addr}")
                 else:
                     get_logger().error(f"Received data from unauthorized IP: {addr}")
             except socket.timeout:
+                continue
+            except ConnectionResetError as e:
+                # 忽略由ICMP Port Unreachable引起的ConnectionResetError
+                get_logger().warning("Connection reset ignored (possibly ICMP 'Port Unreachable')")
                 continue
             except OSError as e:
                 get_logger().error(f"UDP服务器接收数据失败: {e}")
@@ -68,6 +72,24 @@ class UDPServer:
                 self.data_handler.handle_data(data)  # 使用 DataHandler 处理数据
             except queue.Empty:
                 continue  # 如果队列为空，继续循环
+
+    def send_clear_cmd(self):
+        cmd = "dffd01010000000055aa"
+        for addr in self.client_addresses:
+            self.send_data(addr, cmd)
+
+    def send_data(self, address, data):
+        """
+        向指定的客户端发送16进制命令
+        :param address: 目标客户端的地址 (ip, port)
+        :param data: 要发送的数据
+        """
+        hex_data = bytes.fromhex(data.replace(" ", "").lower())
+        try:
+            self.sock.sendto(hex_data, address)
+            get_logger().info(f"Sent data to {address}: {data}")
+        except Exception as e:
+            get_logger().error(f"Failed to send data to {address}: {e}")
 
     def stop(self):
         self.is_running = False
