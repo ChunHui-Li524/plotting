@@ -10,6 +10,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QMessageBox
 
 from src.app.udp_config.view.UdpConfig import Ui_UdpConfig
+from src.utils.env import is_code_env
 
 
 class QUdpConfigWidget(QWidget):
@@ -26,30 +27,30 @@ class QUdpConfigWidget(QWidget):
         self._init_ui()
 
     def _init_ui(self):
-        self.ui.lineEditServerIP.setText("192.168.0.105")
-        self.ui.lineEditServerPort.setText("10009")
+        if is_code_env():
+            self.ui.lineEditServerIP.setText("127.0.0.1")
+            self.ui.lineEditServerPort.setText("8080")
 
-        self.ui.lineEditClientIP1.setText("192.168.0.123")
-        self.ui.lineEditClientPort1.setText("10050")
+            self.ui.lineEditClientIP1.setText("127.0.0.1")
+            self.ui.lineEditClientPort1.setText("8081")
 
-        self.ui.lineEditClientIP2.setText("192.168.0.124")
-        self.ui.lineEditClientPort2.setText("10052")
+            self.ui.lineEditClientIP2.setText("127.0.0.1")
+            self.ui.lineEditClientPort2.setText("8082")
 
-        self.ui.lineEditClientIP3.setText("192.168.0.125")
-        self.ui.lineEditClientPort3.setText("10054")
+            self.ui.lineEditClientIP3.setText("127.0.0.1")
+            self.ui.lineEditClientPort3.setText("8083")
+        else:
+            self.ui.lineEditServerIP.setText("192.168.0.105")
+            self.ui.lineEditServerPort.setText("10009")
 
-        # # 本地测试
-        # self.ui.lineEditServerIP.setText("127.0.0.1")
-        # self.ui.lineEditServerPort.setText("8080")
-        #
-        # self.ui.lineEditClientIP1.setText("127.0.0.1")
-        # self.ui.lineEditClientPort1.setText("8081")
-        #
-        # self.ui.lineEditClientIP2.setText("127.0.0.1")
-        # self.ui.lineEditClientPort2.setText("8082")
-        #
-        # self.ui.lineEditClientIP3.setText("127.0.0.1")
-        # self.ui.lineEditClientPort3.setText("8083")
+            self.ui.lineEditClientIP1.setText("192.168.0.123")
+            self.ui.lineEditClientPort1.setText("10050")
+
+            self.ui.lineEditClientIP2.setText("192.168.0.124")
+            self.ui.lineEditClientPort2.setText("10052")
+
+            self.ui.lineEditClientIP3.setText("192.168.0.125")
+            self.ui.lineEditClientPort3.setText("10054")
 
     @pyqtSlot()
     def on_btnOpen_clicked(self):
