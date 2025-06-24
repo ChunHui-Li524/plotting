@@ -13,6 +13,9 @@ from src.app.plot.view.plot_widget import SAMPLE_NUM, WAVE_NUM
 class ChannelModel:
     def __init__(self, channel_id):
         self.channel_id = channel_id
+        self._init_data()
+
+    def _init_data(self):
         self.wave_data = [np.zeros(SAMPLE_NUM) for _ in range(WAVE_NUM)]
 
     def receive_new_waveform_data(self, new_data):
@@ -20,3 +23,6 @@ class ChannelModel:
         self.wave_data.pop(0)
         # 插入新的波形数据
         self.wave_data.append(new_data)
+
+    def clear_data(self):
+        self._init_data()

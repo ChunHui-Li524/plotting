@@ -64,4 +64,5 @@ class WavePlotController:
         self.plot_widget.export_plot(self.path_manager.get_final_save_path(self.channel_id))
 
     def clear_plot(self):
+        self.data_model.clear_data()
         self.plot_widget.clear_plot(self.curves, self.wave_labels)
