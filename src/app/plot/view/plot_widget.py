@@ -12,22 +12,25 @@ from pyqtgraph import PlotWidget
 from pyqtgraph.exporters import ImageExporter
 
 SAMPLE_NUM = 512
-WAVE_NUM = 5
+TOTAL_WAVE_NUM = 20
+DISPLAYED_WAVE_NUM = 5
 
 
 class QMyPlotWidget(PlotWidget):
     x_changed = pyqtSignal(float, float)
     y_changed = pyqtSignal(float, float)
 
-    def __init__(self, wave_nums=WAVE_NUM, parent=None):
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self.wave_nums = wave_nums
+        self.total_wave_nums = TOTAL_WAVE_NUM
+        self.displayed_wave_nums = DISPLAYED_WAVE_NUM
+        self.current_start_index = 0
         self.init_ui()
 
     def init_ui(self):
         # 设置y轴范围
         self.setYRange(-0.6, 0.6)
-        self.setXRange(0, SAMPLE_NUM * self.wave_nums)      # 512个点一个波形，展示3个
+        self.update_x_range()
         self._init_ticks()
         self._init_wave_split_line()
         self._init_axis_label()
@@ -35,15 +38,25 @@ class QMyPlotWidget(PlotWidget):
         self._add_y_ruler()
         self.set_ruler_visible(False)
 
+    def update_x_range(self):
+        start = self.current_start_index * SAMPLE_NUM
+        end = start + self.displayed_wave_nums * SAMPLE_NUM
+        self.setXRange(start, end)
+
+    def set_current_window(self, index):
+        if 0 <= index <= self.total_wave_nums - self.displayed_wave_nums:
+            self.current_start_index = index
+            self.update_x_range()
+
     def _init_ticks(self):
         # 获取 X 轴对象
-        ticks = [i * SAMPLE_NUM for i in range(self.wave_nums + 1)]
+        ticks = [i * SAMPLE_NUM for i in range(TOTAL_WAVE_NUM + 1)]
         x_axis = self.plotItem.getAxis('bottom')
         x_axis.setTicks([[(v, str(v)) for v in ticks]])
 
     def _init_wave_split_line(self):
         # 添加无限线
-        for i in range(self.wave_nums + 1):
+        for i in range(TOTAL_WAVE_NUM + 1):
             x_pos = i * SAMPLE_NUM
             line = pg.InfiniteLine(pos=x_pos,
                                    angle=90,
@@ -51,7 +64,6 @@ class QMyPlotWidget(PlotWidget):
             self.plotItem.addItem(line)
 
     def _init_axis_label(self):
-        # 设置轴标签（PyQtGraph本身不直接支持单位，可以在标签文本中包含单位）
         self.plotItem.setLabel(axis='left', text='Voltage (V)')
         self.plotItem.setLabel(axis='bottom', text='Time (ns)')
 
@@ -86,9 +98,9 @@ class QMyPlotWidget(PlotWidget):
         self.infinite_y2.setVisible(is_visible)
 
     def create_channel_curves(self, r, g, b, y):
-        curves = [self.plot(pen=(r, g, b), name=f'Waveform {i + 1}') for i in range(self.wave_nums)]
+        curves = [self.plot(pen=(r, g, b), name=f'Waveform {i + 1}') for i in range(self.total_wave_nums)]
 
-        wave_labels = [pg.TextItem(f"初始脉冲", color=(r, g, b)) for _ in range(self.wave_nums)]
+        wave_labels = [pg.TextItem(f"初始脉冲", color=(r, g, b)) for _ in range(self.total_wave_nums)]
         for i, label in enumerate(wave_labels):
             label.setVisible(False)
             label.setPos(i * SAMPLE_NUM, y)
@@ -96,18 +108,22 @@ class QMyPlotWidget(PlotWidget):
         return curves, wave_labels
 
     def update_labels(self, pulse_id, wave_labels):
-        for i in range(self.wave_nums - 1):
+        for i in range(self.total_wave_nums - 1):
             wave_labels[i].setText(wave_labels[i + 1].toPlainText())
-        wave_labels[self.wave_nums - 1].setText(f"脉冲{pulse_id}")
+        wave_labels[self.total_wave_nums - 1].setText(f"脉冲{pulse_id}")
 
         for wave_label in wave_labels:
             wave_label.setVisible(True)
 
     def update_curve(self, curves: list, wave_data: list):
         for i, curve in enumerate(curves):
-            start = SAMPLE_NUM * i
+            start = i * SAMPLE_NUM
             x = np.arange(start, start + len(wave_data[i]), 1)
             curve.setData(x=x, y=wave_data[i])
+
+        # 自动滚动窗口到最新数据
+        new_index = min(len(curves), self.total_wave_nums - self.displayed_wave_nums)
+        self.set_current_window(new_index)
 
     def clear_plot(self, curves, wave_labels):
         for curve in curves:

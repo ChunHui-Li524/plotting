@@ -7,7 +7,7 @@
 """
 import numpy as np
 
-from src.app.plot.view.plot_widget import SAMPLE_NUM, WAVE_NUM
+from src.app.plot.view.plot_widget import SAMPLE_NUM, TOTAL_WAVE_NUM
 
 
 class ChannelModel:
@@ -16,7 +16,7 @@ class ChannelModel:
         self._init_data()
 
     def _init_data(self):
-        self.wave_data = [np.zeros(SAMPLE_NUM) for _ in range(WAVE_NUM)]
+        self.wave_data = [np.zeros(SAMPLE_NUM) for _ in range(TOTAL_WAVE_NUM)]
 
     def receive_new_waveform_data(self, new_data):
         # 移除第一个波形的数据
