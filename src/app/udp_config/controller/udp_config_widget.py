@@ -41,7 +41,7 @@ class QUdpConfigWidget(QWidget):
             self.ui.lineEditClientPort3.setText("8083")
         else:
             self.ui.lineEditServerIP.setText("192.168.0.105")
-            self.ui.lineEditServerPort.setText("10009")
+            self.ui.lineEditServerPort.setText("10110")
 
             self.ui.lineEditClientIP1.setText("192.168.0.123")
             self.ui.lineEditClientPort1.setText("10050")
